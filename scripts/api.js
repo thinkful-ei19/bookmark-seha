@@ -7,7 +7,7 @@ const api = (function () {
   const getItems = function (callback) {
     $.getJSON(
       BASE_URL + '/bookmarks');
-      
+
   };
 
   const createItem = function(data, callback) {
@@ -20,6 +20,17 @@ const api = (function () {
     });
   };
 
+  function updateItem (id, updateData, callback) {
+    // const jsonData = JSON.stringify(updateData);
+    $.ajax({
+      url:BASE_URL + '/bookmarks/' + id,
+      method:'PATCH',
+      contentType:'application/json',
+      data:JSON.stringify(updateData),
+      success:callback
+    });
+  }
+
   const deleteItem = function(id, callback) {
     $.ajax({
       url: BASE_URL + '/bookmarks/' + id,
@@ -31,9 +42,11 @@ const api = (function () {
   };
 
 
+
   return {
     getItems,
     createItem,
+    updateItem,
     deleteItem
   };
 }());

@@ -6,7 +6,13 @@ function renderApp() {
   bookmarkapp.addBookmarkButtonHandler();
   bookmarkapp.submitBookmarkToList();
   bookmarkapp.addFilterButtonHandler();
+  bookmarkapp.deleteBookmarkHandler();
+  bookmarkapp.expandBookmarkWindow();
+  bookmarkapp.getBookmarkId()
+
+
   
+
   api.getItems(items => {
     items.forEach(item => store.addItemToStore(item));
     bookmarkapp.render();

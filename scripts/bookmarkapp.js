@@ -8,7 +8,7 @@ const bookmarkapp = (function() {
     let generateHTML;
     if (item.expanded) {
       generateHTML = 
-           `<li class="bookmark-item" data-item-i>${item.id}>
+           `<li class="bookmark-id" data-item-id="${item.id}">
            <header>
                <span class="header-title">${item.title}</span>
            </header>
@@ -19,44 +19,40 @@ const bookmarkapp = (function() {
            </article>
            <div class="item__buttons">
                <button class="item-buttons-toggle">${item.detailButton}Show details</button>
-               <button class="item-buttons-delete">${item.deleteButton}</button>
+               //<button class="delete-button">${item.deleteButton}</button>
+               <button class="delete-bookmark">Delete</button>  
            </div>
            <div class="rating">${item.rating}
-               <span class="fa fa-star checked"></span>
-               <span class="fa fa-star checked"></span>
-               <span class="fa fa-star checked"></span>
-               <span class="fa fa-star"></span>
-               <span class="fa fa-star"></span>
            </div>
            </li> 
            `;
     } else {
       generateHTML= `
+      <li class="bookmark-id" data-item-id="${item.id}">
         <span class="header-title">${item.title}</span>
         <div class="rating">${item.rating}
-               <span class="fa fa-star checked"></span>
-               <span class="fa fa-star"></span>
-               <span class="fa fa-star"></span>
-               <span class="fa fa-star"></span>
-               <span class="fa fa-star"></span>
-           </div>`;
+           </div>
+           </li>`;
     }
     return generateHTML;
   }
   function generateHiddenForm() {
     return `
-           <form class="hiddenformForm">
+           <form role= "role" class="hiddenformForm" method="post">
+           <fieldset>
+           <legend>
            <h2>Create Bookmark</h2>
+           </legend>
            <label for="title-entry">Title</label>
            <input placeholder='NewYorkTimes' class='title-entry' type="text" name='title-entry' value='NewYorkTimes'>
            <label for="url-entry">URL</label>
            <input placeholder='newyorktimes.com' class='url-entry' type="href" name='url' value='http://wwww.nytimes.com'/>
-           <label for="description-entry">Description</label>
-           <input placeholder='Detailed Description' class='description-entry' type="text" name='Description' value='The New York Times: Find breaking news, multimedia, reviews & opinion on Washington, business, sports, movies, travel, books, jobs, education, real estate, cars & more at nytimes.com.
-           '/>
            <label for="rating-entry">Ratings</label>
            <input type="text" name="rating-entry" class="rating-entry" placeholder="5" value="5">
-           <button class="submit-bookmark">Submit</button>  
+           <label for="description-entry">Description</label>
+           <input placeholder='Detailed Description' class='description-entry' type="text" name='Description' value='The New York Times: 
+           '/>
+           </fieldset>
            </form>`;
   }
 
@@ -104,13 +100,44 @@ const bookmarkapp = (function() {
       $('.add-button-holder').html(generateAddButton());
       addBookmarkButtonHandler();
       var newItem = {title: title, url: url, desc: desc, rating: rating};
-      api.createItem(newItem, function() {
-        store.addItemToStore(newItem);
+      api.createItem(newItem, function(item) {
+        store.addItemToStore(item);
         render();
       });
     });
   }
 
+  function expandBookmarkWindow() {
+    $('.hiddenformForm').on('click', '.bookmark-container', event => {
+      const id = $(event.currentTarget).data('bookmark-id');
+      console.log(id);
+      const bookmark = store.items.find(item => item.id === id);
+      item.expanded = !item.expanded;
+      render();
+    });
+  }
+
+
+  //   function getBookmarkId(target) {
+  //     $(target).parents('.bookmark-container').data('bookmark-id');
+  //   }
+
+  function getBookmarkId(item) {
+    return $(item)
+      .closest('.bookmark-container')
+      .data('.bookmark-id');
+  }
+
+  function deleteBookmarkHandler() {
+    $('.bookmark-list').on('click', '.delete-button', event => {
+      event.stopPropagation();
+      const id = getBookmarkId(event.currentTarget);
+      api.deleteItem(id, function() {
+        store.findAndDelete(id);
+        render();
+      });
+    });
+  }
   
   function render (items) {
     const bookmarkHtml = generateBookmarks(items ? items : store.items);
@@ -125,7 +152,10 @@ const bookmarkapp = (function() {
     generateAddButton,
     generateHiddenForm,
     submitBookmarkToList,
-    addFilterButtonHandler
+    getBookmarkId,
+    addFilterButtonHandler,
+    expandBookmarkWindow,
+    deleteBookmarkHandler
   };
 
 
