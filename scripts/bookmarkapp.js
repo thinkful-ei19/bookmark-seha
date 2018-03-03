@@ -19,7 +19,7 @@ const bookmarkapp = (function() {
            </article>
            <div class="item__buttons">
                <button class="item-buttons-toggle">${item.detailButton}Show details</button>
-               //<button class="delete-button">${item.deleteButton}</button>
+               <button class="delete-button">${item.deleteButton}</button>
                <button class="delete-bookmark">Delete</button>  
            </div>
            <div class="rating">${item.rating}
@@ -52,6 +52,7 @@ const bookmarkapp = (function() {
            <label for="description-entry">Description</label>
            <input placeholder='Detailed Description' class='description-entry' type="text" name='Description' value='The New York Times: 
            '/>
+           <button class="submit-bookmark" type="submit">Submit</button>
            </fieldset>
            </form>`;
   }
@@ -118,9 +119,6 @@ const bookmarkapp = (function() {
   }
 
 
-  //   function getBookmarkId(target) {
-  //     $(target).parents('.bookmark-container').data('bookmark-id');
-  //   }
 
   function getBookmarkId(item) {
     return $(item)
