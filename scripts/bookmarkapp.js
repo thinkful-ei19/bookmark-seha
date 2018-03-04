@@ -5,36 +5,34 @@
 const bookmarkapp = (function() {
   function generateBookmark(item){
     console.log('generating bookmark app');
-    let generateHTML;
-    if (item.expanded) {
-      generateHTML = 
-           `<li class="bookmark-id" data-item-id="${item.id}">
+    return `<li class="bookmark-id" data-item-id="${item.id}">
            <header>
                <span class="header-title">${item.title}</span>
            </header>
            <article>
-               <p class="item-description">${item.desc}
-                <span class="site-link">${item.url} class="item-link">Visit Site</span> 
-               </p>     
+            <div>
+
+              ${getRatingStars(item.rating)}  
+               </div>
+               <div class="description ${item.expanded ? 'expanded' : 'collapsed'}">
+              <p class="item-description">${item.desc}</p>
+              <a class="site-link" href="${item.url}" class="item-link">Visit Site</a> 
+               </div>
            </article>
            <div class="item__buttons">
-               <button class="item-buttons-toggle">${item.detailButton}Show details</button>
-               <button class="delete-button">${item.deleteButton}</button>
-               <button class="delete-bookmark">Delete</button>  
-           </div>
-           <div class="rating">${item.rating}
-           </div>
-           </li> 
-           `;
-    } else {
-      generateHTML= `
-      <li class="bookmark-id" data-item-id="${item.id}">
-        <span class="header-title">${item.title}</span>
-        <div class="rating">${item.rating}
+               <button class="delete-bookmark">Delete</button>
            </div>
            </li>`;
-    }
-    return generateHTML;
+  }
+
+  function getRatingStars(rating) {
+    return `
+    <span class="fa fa-star ${rating >= 1 ? 'checked' : '' }"></span>
+    <span class="fa fa-star ${rating >= 2 ? 'checked' : '' }"></span>
+    <span class="fa fa-star ${rating >= 3 ? 'checked' : '' }"></span>
+    <span class="fa fa-star ${rating >= 4 ? 'checked' : '' }"></span>
+    <span class="fa fa-star ${rating >= 5 ? 'checked' : '' }"></span>
+    `;
   }
   function generateHiddenForm() {
     return `
@@ -105,6 +103,7 @@ const bookmarkapp = (function() {
         store.addItemToStore(item);
         render();
       });
+      hideBoomarkForm();
     });
   }
 
@@ -140,8 +139,12 @@ const bookmarkapp = (function() {
   function render (items) {
     const bookmarkHtml = generateBookmarks(items ? items : store.items);
     $('.bookmark-list').html(bookmarkHtml);
+    addExpandHandler();
   }
 
+  function addExpandHandler() {
+    $('.headertitle')
+  }
 
   return{
     render,

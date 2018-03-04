@@ -82,3 +82,15 @@ button[type="submit"] {
 .hidden {
     display: none;
 }  
+
+.checked {
+  color: orange;
+}
+
+.expanded {
+  display: block;
+}
+
+.collapsed {
+  display: none;
+}
