@@ -94,3 +94,7 @@ button[type="submit"] {
 .collapsed {
   display: none;
 }
+
+.header-title {
+  cursor: pointer;
+}

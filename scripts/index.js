@@ -8,7 +8,8 @@ function renderApp() {
   bookmarkapp.addFilterButtonHandler();
   bookmarkapp.deleteBookmarkHandler();
   bookmarkapp.expandBookmarkWindow();
-  bookmarkapp.getBookmarkId()
+  bookmarkapp.getBookmarkId();
+  bookmarkapp.viewBookmark();
 
 
   

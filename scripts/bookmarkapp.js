@@ -7,7 +7,7 @@ const bookmarkapp = (function() {
     console.log('generating bookmark app');
     return `<li class="bookmark-id" data-item-id="${item.id}">
            <header>
-               <span class="header-title">${item.title}</span>
+               <span data-bookmark="${item.title}" class="header-title">${item.title}</span>
            </header>
            <article>
             <div>
@@ -34,24 +34,23 @@ const bookmarkapp = (function() {
     <span class="fa fa-star ${rating >= 5 ? 'checked' : '' }"></span>
     `;
   }
-  function generateHiddenForm() {
+  function generateHiddenForm(data) {
     return `
            <form role= "role" class="hiddenformForm" method="post">
-           <fieldset>
-           <legend>
-           <h2>Create Bookmark</h2>
-           </legend>
-           <label for="title-entry">Title</label>
-           <input placeholder='NewYorkTimes' class='title-entry' type="text" name='title-entry' value='NewYorkTimes'>
-           <label for="url-entry">URL</label>
-           <input placeholder='newyorktimes.com' class='url-entry' type="href" name='url' value='http://wwww.nytimes.com'/>
-           <label for="rating-entry">Ratings</label>
-           <input type="text" name="rating-entry" class="rating-entry" placeholder="5" value="5">
-           <label for="description-entry">Description</label>
-           <input placeholder='Detailed Description' class='description-entry' type="text" name='Description' value='The New York Times: 
-           '/>
-           <button class="submit-bookmark" type="submit">Submit</button>
-           </fieldset>
+             <fieldset>
+               <legend>
+                 <h2>Create Bookmark</h2>
+               </legend>
+               <label for="title-entry">Title</label>
+               <input placeholder='NewYorkTimes' class='title-entry' type="text" name='title-entry' placeholder='NewYorkTimes' value=${data} />
+               <label for="url-entry">URL</label>
+               <input placeholder='newyorktimes.com' class='url-entry' type="href" name='url' placeholder='http://wwww.nytimes.com'/>
+               <label for="rating-entry">Ratings</label>
+               <input type="text" name="rating-entry" class="rating-entry" placeholder="5" />
+               <label for="description-entry">Description</label>
+               <input placeholder='Detailed Description' class='description-entry' type="text" name='Description' placeholder='The New York Times: '/>
+               <button class="submit-bookmark" type="submit">Submit</button>
+             </fieldset>
            </form>`;
   }
 
@@ -145,6 +144,15 @@ const bookmarkapp = (function() {
   function addExpandHandler() {
     $('.headertitle')
   }
+  
+  function viewBookmark(event) {
+    $('.header-title').on('click', function(event){
+      event.preventDefault();
+      let bookmark = $(this).attr('data-bookmark');
+      $('#hiddenform').html(generateHiddenForm(bookmark));
+      $('#hiddenform').css('display', 'block');
+    });
+  }
 
   return{
     render,
@@ -156,7 +164,8 @@ const bookmarkapp = (function() {
     getBookmarkId,
     addFilterButtonHandler,
     expandBookmarkWindow,
-    deleteBookmarkHandler
+    deleteBookmarkHandler,
+    viewBookmark
   };
 
 
