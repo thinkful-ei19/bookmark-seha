@@ -2,95 +2,111 @@
   box-sizing: border-box;
 }
 
+
 body {
-    background-color:white ;
     font-family: "Roboto", helvetica, sans-serif;
     padding: 60px 0 0;
-    margin: 0;
-    font-size: 18px;
+    color: black;
+    font-size: 12px;
+    background-color: rgb(175, 228, 241);
+    
   }
 
+.bookmark-list {
+  margin: 0 auto;
+  width: 50%;
+}
+
+.bookmark-item-expanded{
+    border: solid black 2px;
+    border-radius:5px;
+    background-color: rgb(132, 215, 253);
+    margin-bottom: 2px;
+    height: 150px;
+    margin: 20px auto 20px;
+}
+
+
+.add-button-holder{
+  font-size: 25px;
+
+}
+
+#add-bookmark-form{
+    text-align: center;
+    width: 60%;
+    margin: auto;
+    padding: 10px;
+}
+
+
+.bookmark-container{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px
+}
 .hiddenformForm legend {
-    width: 100%;
-    line-height: 38px;
+    width: 70%;
+    height: auto;
+    line-height: 20px;
     font-size: 20px;
     font-weight: 300;
     color: black;
     text-align: center;
-    letter-spacing: 0;
     margin: 0 auto 40px;
   }
 
 
 h1{
-  width: 100%;
-  line-height: 38px;
-  font-size: 35px;
-  font-weight: 300;
-  color: #0c0101;
-  text-align: center;
-  letter-spacing: 0;
-  margin: 0 auto 45px;
+    font-family: 'Londrina Shadow', cursive;
+    text-align: center;
+    font-size: 60px;
+    color: black;
+    margin: 20px 0 0 0;
 }
 
+
 .hiddenformForm {
-    width: 400px;
-    height: 400px;
-    border-radius: 3px;
-    background: rgb(163, 60, 60);
+    width: 480px;
+    height: 380px;
+    background:  rgb(132, 215, 253);
     margin: 0 auto;
   }
-
+p{
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
 
 input[name="title-entry"],
 input[name="url"],
 input[name="Description"],
 input[name="rating-entry"] {
   display: block;
-  width: 80%;
+  width: 50%;
   height: auto;
-  font-size: 13px;
+  font-size: 15px;
   text-align: center;
-  padding: 0px;
-  border: 2px solid #e7e7e7;
-  border-radius: 3px;
+  padding-top: 0px;
   background: #fcfcfc;
   margin: 10px auto 10px;
 }
-input[label="title-entry"],
-input[label="url"],
-input[label="description"],
-input[label="rating-entry"] {
-  display: inline-block;
-  font-size: 15px;
-  text-align: center;
-  padding: 0px;
-  margin: 30px auto 10px;
-}
+
 
 button[type="submit"] {
   height: auto;
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 18px;
   text-align: center;
   color: rgb(12, 7, 7);
-  border: 0;
+   border: solid black 2px;
   cursor: pointer;
-  margin-bottom: 0;
+  margin-bottom: 60;
   
 }
-.hidden {
-    display: none;
-}  
 
 .checked {
-  color: orange;
-}
-
-.expanded {
-  display: block;
-}
-
-.collapsed {
-  display: none;
+    color: orange;
 }

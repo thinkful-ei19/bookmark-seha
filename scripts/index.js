@@ -8,10 +8,11 @@ function renderApp() {
   bookmarkapp.addFilterButtonHandler();
   bookmarkapp.deleteBookmarkHandler();
   bookmarkapp.expandBookmarkWindow();
-  bookmarkapp.getBookmarkId()
+  bookmarkapp.getBookmarkId();
+  bookmarkapp.viewBookmark();
 
 
-  
+
 
   api.getItems(items => {
     items.forEach(item => store.addItemToStore(item));

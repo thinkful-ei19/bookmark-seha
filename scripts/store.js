@@ -2,12 +2,7 @@
 'use strict';
 // global $, store, api, bookmarkapp 
 const store = (function() {
-  let items = [
-    { id: '1', title: 'New York Times', desc: 'New York Times Description', url:"http://www.google.com", rating: '4', expanded: true },
-    { id: '2', title: 'HuffingtonPost', rating: '2', expanded: false},
-    { id: '3', title: 'CNN', rating: '3', expanded: false },
-    { id: '4', title: 'Washington Post', rating: '5', expanded: false }
-  ];
+  let items = [];
   let adding = false;
 
   const findById = function(id) {

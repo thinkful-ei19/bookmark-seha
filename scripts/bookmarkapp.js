@@ -2,66 +2,56 @@
 'use strict';
 // global $, store, api, bookmarkapp 
 
-const bookmarkapp = (function() {
-  function generateBookmark(item){
-    console.log('generating bookmark app');
-    return `<li class="bookmark-id" data-item-id="${item.id}">
-           <header>
-               <span class="header-title">${item.title}</span>
-           </header>
-           <article>
-            <div>
-
-              ${getRatingStars(item.rating)}  
-               </div>
-               <div class="description ${item.expanded ? 'expanded' : 'collapsed'}">
-              <p class="item-description">${item.desc}</p>
-              <a class="site-link" href="${item.url}" class="item-link">Visit Site</a> 
-               </div>
-           </article>
-           <div class="item__buttons">
-               <button class="delete-bookmark">Delete</button>
-           </div>
-           </li>`;
+const bookmarkapp = (function () {
+  function generateBookmark(item) { 
+    return `<div role="button" class="bookmark-item-expanded" data-item-id="${item.id}">
+            <h2 class="h2-title"> ${item.title} </h2>
+            <div class="rating-expanded">${getRatingStars(item.rating)}</div> 
+            <div class="bookmark-hidden-area" style="display: none">
+              <p>${item.desc === '' ? 'No Description' : item.desc }</p>
+              <a href="${item.url}" target="_blank"><button class="link-button" name="link-button">Visit Site</button></a>
+              <button class="delete-button" name="button">Delete</button>
+            </div>
+            </div>
+            </div>`;
   }
 
   function getRatingStars(rating) {
     return `
-    <span class="fa fa-star ${rating >= 1 ? 'checked' : '' }"></span>
-    <span class="fa fa-star ${rating >= 2 ? 'checked' : '' }"></span>
-    <span class="fa fa-star ${rating >= 3 ? 'checked' : '' }"></span>
-    <span class="fa fa-star ${rating >= 4 ? 'checked' : '' }"></span>
-    <span class="fa fa-star ${rating >= 5 ? 'checked' : '' }"></span>
+    <span class="fa fa-star ${rating >= 1 ? 'checked' : ''}"></span>
+    <span class="fa fa-star ${rating >= 2 ? 'checked' : ''}"></span>
+    <span class="fa fa-star ${rating >= 3 ? 'checked' : ''}"></span>
+    <span class="fa fa-star ${rating >= 4 ? 'checked' : ''}"></span>
+    <span class="fa fa-star ${rating >= 5 ? 'checked' : ''}"></span>
     `;
   }
-  function generateHiddenForm() {
+  function generateHiddenForm(data) { 
     return `
            <form role= "role" class="hiddenformForm" method="post">
-           <fieldset>
-           <legend>
-           <h2>Create Bookmark</h2>
-           </legend>
-           <label for="title-entry">Title</label>
-           <input placeholder='NewYorkTimes' class='title-entry' type="text" name='title-entry' value='NewYorkTimes'>
-           <label for="url-entry">URL</label>
-           <input placeholder='newyorktimes.com' class='url-entry' type="href" name='url' value='http://wwww.nytimes.com'/>
-           <label for="rating-entry">Ratings</label>
-           <input type="text" name="rating-entry" class="rating-entry" placeholder="5" value="5">
-           <label for="description-entry">Description</label>
-           <input placeholder='Detailed Description' class='description-entry' type="text" name='Description' value='The New York Times: 
-           '/>
-           <button class="submit-bookmark" type="submit">Submit</button>
-           </fieldset>
+             <fieldset>
+               <legend>
+                 <h2>${data ? data : 'Create Bookmark'}</h2>
+               </legend>
+               <label for="title-entry">Title</label>
+               <input placeholder='Enter Title' required class='title-entry' type="text" name='title-entry' />
+               <label for="url-entry">URL</label>
+               <input placeholder='Enter Url' required class='url-entry' type="href" name='url' />
+               <label for="rating-entry">Ratings</label>
+               <input type="text" name="rating-entry" class="rating-entry" placeholder="Enter Rating" />
+               <label for="description-entry">Description</label>
+               <input placeholder='Detailed Description' class='description-entry' type="text" maxlength="150" name='Description' />
+               <button class="submit-bookmark" type="submit">Submit</button>
+             </fieldset>
            </form>`;
   }
 
-  function generateAddButton(){
+  function generateAddButton() {
     const button = '<button class="add-button" type="submit">Add Bookmark</button>';
     return button;
   }
 
-  function addBookmarkButtonHandler(){
-    $('.add-button-holder').on('click', function(event){
+  function addBookmarkButtonHandler() {
+    $('.add-button-holder').on('click', function (event) {
       event.preventDefault();
       $('#hiddenform').html(generateHiddenForm());
       $('#hiddenform').css('display', 'block');
@@ -89,7 +79,7 @@ const bookmarkapp = (function() {
 
 
   function submitBookmarkToList() {
-    $('.submit-bookmark').on('click', function(event) {
+    $('.submit-bookmark').on('click', function (event) {
       event.preventDefault();
       const title = $('.title-entry').val();
       const url = $('.url-entry').val();
@@ -98,13 +88,24 @@ const bookmarkapp = (function() {
 
       $('.add-button-holder').html(generateAddButton());
       addBookmarkButtonHandler();
-      var newItem = {title: title, url: url, desc: desc, rating: rating};
-      api.createItem(newItem, function(item) {
-        store.addItemToStore(item);
-        render();
-      });
-      hideBoomarkForm();
+      var newItem = { title: title, url: url, desc: desc, rating: rating };
+      if (checkValidity(newItem)) {
+        api.createItem(newItem, function (item) {
+          store.addItemToStore(item);
+          render();
+          viewBookmark();
+        });
+        hideBoomarkForm();
+      }
     });
+  }
+
+  function checkValidity(newItem) {
+    if(newItem.title == '' || newItem.url == '' || newItem.desc == '' || newItem.rating == '') {
+      alert('Please fill the field!');
+      return false;
+    }
+    return true;
   }
 
   function expandBookmarkWindow() {
@@ -121,32 +122,36 @@ const bookmarkapp = (function() {
 
   function getBookmarkId(item) {
     return $(item)
-      .closest('.bookmark-container')
-      .data('.bookmark-id');
+      .closest('.bookmark-item-expanded')
+      .attr('data-item-id');
   }
 
   function deleteBookmarkHandler() {
     $('.bookmark-list').on('click', '.delete-button', event => {
       event.stopPropagation();
       const id = getBookmarkId(event.currentTarget);
-      api.deleteItem(id, function() {
+      api.deleteItem(id, function () {
         store.findAndDelete(id);
         render();
       });
     });
   }
-  
-  function render (items) {
+
+  function render(items) {
     const bookmarkHtml = generateBookmarks(items ? items : store.items);
     $('.bookmark-list').html(bookmarkHtml);
-    addExpandHandler();
   }
 
-  function addExpandHandler() {
-    $('.headertitle')
+
+  function viewBookmark() {
+    $('.h2-title').on('click', function (event) {
+      var div = $(event.currentTarget)
+        .nextAll('.bookmark-hidden-area');
+      div.css('display', (div.css('display') === 'block') ? 'none' : 'block');
+    });
   }
 
-  return{
+  return {
     render,
     addBookmarkButtonHandler,
     generateBookmark,
@@ -156,8 +161,7 @@ const bookmarkapp = (function() {
     getBookmarkId,
     addFilterButtonHandler,
     expandBookmarkWindow,
-    deleteBookmarkHandler
+    deleteBookmarkHandler,
+    viewBookmark
   };
-
-
 })();
