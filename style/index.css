@@ -9,7 +9,7 @@ body {
     color: black;
     font-size: 12px;
     background-color: rgb(175, 228, 241);
-    
+
   }
 
 .bookmark-list {
@@ -104,9 +104,21 @@ button[type="submit"] {
    border: solid black 2px;
   cursor: pointer;
   margin-bottom: 60;
-  
+
 }
 
 .checked {
     color: orange;
+}
+
+.h2-title {
+  cursor: pointer;
+}
+
+.bookmark-hidden-area {
+  display: none;
+}
+
+.bookmark-hidden-area.active {
+  display: block;
 }

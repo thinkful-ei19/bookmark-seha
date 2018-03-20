@@ -1,14 +1,14 @@
 // eslint-disable-next-line no-unused-vars
 'use strict';
-// global $, store, api, bookmarkapp 
+// global $, store, api, bookmarkapp
 
 const bookmarkapp = (function () {
-  function generateBookmark(item) { 
+  function generateBookmark(item) {
     return `<div role="button" class="bookmark-item-expanded" data-item-id="${item.id}">
             <h2 class="h2-title"> ${item.title} </h2>
-            <div class="rating-expanded">${getRatingStars(item.rating)}</div> 
-            <div class="bookmark-hidden-area" style="display: none">
-              <p>${item.desc === '' ? 'No Description' : item.desc }</p>
+            <div class="rating-expanded">${getRatingStars(item.rating)}</div>
+            <div class="bookmark-hidden-area">
+              <p>${item.desc === '' ? 'No Description' : item.desc}</p>
               <a href="${item.url}" target="_blank"><button class="link-button" name="link-button">Visit Site</button></a>
               <button class="delete-button" name="button">Delete</button>
             </div>
@@ -25,7 +25,7 @@ const bookmarkapp = (function () {
     <span class="fa fa-star ${rating >= 5 ? 'checked' : ''}"></span>
     `;
   }
-  function generateHiddenForm(data) { 
+  function generateHiddenForm(data) {
     return `
            <form role= "role" class="hiddenformForm" method="post">
              <fieldset>
@@ -101,8 +101,16 @@ const bookmarkapp = (function () {
   }
 
   function checkValidity(newItem) {
-    if(newItem.title == '' || newItem.url == '' || newItem.desc == '' || newItem.rating == '') {
-      alert('Please fill the field!');
+    if (newItem.title == '' || newItem.url == '' || newItem.desc == '' || newItem.rating == '') {
+      alert('Please provide the missing information!');
+      return false;
+    }
+    if (!newItem.url.startsWith('http')){
+      alert('Please enter valid URL that begins with http!');
+      return false;
+    }
+    if (isNaN(newItem.rating) || newItem.rating < 1 || newItem.rating > 5){
+      alert('Please enter number between 1 and 5!');
       return false;
     }
     return true;
@@ -133,6 +141,7 @@ const bookmarkapp = (function () {
       api.deleteItem(id, function () {
         store.findAndDelete(id);
         render();
+        viewBookmark();
       });
     });
   }
@@ -144,10 +153,9 @@ const bookmarkapp = (function () {
 
 
   function viewBookmark() {
-    $('.h2-title').on('click', function (event) {
-      var div = $(event.currentTarget)
-        .nextAll('.bookmark-hidden-area');
-      div.css('display', (div.css('display') === 'block') ? 'none' : 'block');
+    $('.h2-title').on('click', function () {
+      let _target = $(this).parent().find('.bookmark-hidden-area');
+      _target.toggleClass('active');
     });
   }
 
