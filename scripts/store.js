@@ -1,8 +1,41 @@
 // eslint-disable-next-line no-unused-vars
 'use strict';
-// global $, store, api, bookmarkapp 
+// global $, store, api, bookmarkapp
 const store = (function() {
-  let items = [];
+  let items = [
+    {
+      id: '1',
+      title: 'New York Times',
+      rating: '4',
+      expanded: false,
+      description: "Some description goes here.",
+      URL: "http://www.nytimes.com"
+    },
+    {
+      id: '2',
+      title: 'HuffingtonPost',
+      rating: '4',
+      expanded: false,
+      description: "Some description goes here.",
+      URL: "http://www.nytimes.com"
+    },
+    {
+      id: '3',
+      title: 'CNN',
+      rating: '3',
+      expanded: false,
+      description: "Some description goes here.",
+      URL: "http://www.nytimes.com"
+    },
+    {
+      id: '4',
+      title: 'Washington Post',
+      rating: '5',
+      expanded: false,
+      description: "Some description goes here.",
+      URL: "http://www.nytimes.com"
+    },
+  ];
   let adding = false;
 
   const findById = function(id) {
@@ -59,5 +92,3 @@ const store = (function() {
     findAndToggleChecked
   };
 }());
-
-
