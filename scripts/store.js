@@ -9,7 +9,7 @@ const store = (function() {
       rating: '4',
       expanded: false,
       description: "Some description goes here.",
-      URL: "http://www.nytimes.com"
+      URL: "https://www.nytimes.com"
     },
     {
       id: '2',
@@ -17,7 +17,7 @@ const store = (function() {
       rating: '4',
       expanded: false,
       description: "Some description goes here.",
-      URL: "http://www.nytimes.com"
+      URL: "https://www.huffingtonpost.com/"
     },
     {
       id: '3',
@@ -25,7 +25,7 @@ const store = (function() {
       rating: '3',
       expanded: false,
       description: "Some description goes here.",
-      URL: "http://www.nytimes.com"
+      URL: "https://www.cnn.com"
     },
     {
       id: '4',
@@ -33,7 +33,7 @@ const store = (function() {
       rating: '5',
       expanded: false,
       description: "Some description goes here.",
-      URL: "http://www.nytimes.com"
+      URL: "https://www.washingtonpost.com/"
     },
   ];
   let adding = false;
