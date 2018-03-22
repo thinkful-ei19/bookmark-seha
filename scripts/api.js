@@ -5,9 +5,7 @@ const api = (function () {
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/seha';
 
   const getItems = function (callback) {
-    $.getJSON(
-      BASE_URL + '/bookmarks');
-
+    $.getJSON(BASE_URL + '/bookmarks');
   };
 
   const createItem = function(data, callback) {

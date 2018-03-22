@@ -100,6 +100,17 @@ const bookmarkapp = (function () {
     });
   }
 
+  function generateInitialList() {
+    store.items.forEach(function (item) {
+      var newItem = { title: item.title, url: item.url, desc: item.desc, rating: item.rating };  
+      api.createItem(newItem, function (createdItem) {
+        item.id = createdItem.id;
+        render();
+        viewBookmark();
+      });
+    });
+  }
+
   function checkValidity(newItem) {
     if (newItem.title == '' || newItem.url == '' || newItem.desc == '' || newItem.rating == '') {
       alert('Please provide the missing information!');
@@ -170,6 +181,7 @@ const bookmarkapp = (function () {
     addFilterButtonHandler,
     expandBookmarkWindow,
     deleteBookmarkHandler,
-    viewBookmark
+    viewBookmark,
+    generateInitialList
   };
 })();

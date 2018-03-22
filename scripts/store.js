@@ -4,36 +4,32 @@
 const store = (function() {
   let items = [
     {
-      id: '1',
       title: 'New York Times',
       rating: '4',
       expanded: false,
-      description: "Some description goes here.",
-      URL: "https://www.nytimes.com"
+      desc: "Breaking News, World News & Multimedia",
+      url: "https://www.nytimes.com"
     },
     {
-      id: '2',
       title: 'HuffingtonPost',
       rating: '4',
       expanded: false,
-      description: "Some description goes here.",
-      URL: "https://www.huffingtonpost.com/"
+      desc: "Breaking News, U.S. and World News | HuffPost",
+      url: "https://www.huffingtonpost.com/"
     },
     {
-      id: '3',
       title: 'CNN',
       rating: '3',
       expanded: false,
-      description: "Some description goes here.",
-      URL: "https://www.cnn.com"
+      desc: "Breaking News, Latest News and Videos",
+      url: "https://www.cnn.com"
     },
     {
-      id: '4',
       title: 'Washington Post',
       rating: '5',
       expanded: false,
-      description: "Some description goes here.",
-      URL: "https://www.washingtonpost.com/"
+      desc: "Democracy dies in darkness",
+      url: "https://www.washingtonpost.com/"
     },
   ];
   let adding = false;
