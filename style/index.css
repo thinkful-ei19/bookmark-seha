@@ -15,6 +15,7 @@ body {
 .bookmark-list {
   margin: 0 auto;
   width: 50%;
+  list-style-type: none;
 }
 
 .bookmark-item-expanded{
@@ -73,6 +74,12 @@ h1{
     background:  rgb(132, 215, 253);
     margin: 0 auto;
   }
+.hiddenformForm.hidden {
+  display: none;
+}
+.hiddenformForm.active {
+  display: block;
+}  
 p{
     display: block;
     -webkit-margin-before: 1em;
@@ -115,10 +122,14 @@ button[type="submit"] {
   cursor: pointer;
 }
 
-.bookmark-hidden-area {
+._class{
   display: none;
 }
 
 .bookmark-hidden-area.active {
   display: block;
+}
+
+.bookmark-hidden-area {
+  display: none;
 }

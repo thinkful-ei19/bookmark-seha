@@ -4,16 +4,17 @@
 
 const bookmarkapp = (function () {
   function generateBookmark(item) {
-    return `<div role="button" class="bookmark-item-expanded" data-item-id="${item.id}">
+    let _class = item.active ? 'active' : '';
+    return `<li role="button" class="bookmark-item-expanded" data-item-id="${item.id}">
             <h2 class="h2-title"> ${item.title} </h2>
             <div class="rating-expanded">${getRatingStars(item.rating)}</div>
-            <div class="bookmark-hidden-area">
+            <div class="bookmark-hidden-area ${_class}">
               <p>${item.desc === '' ? 'No Description' : item.desc}</p>
               <a href="${item.url}" target="_blank"><button class="link-button" name="link-button">Visit Site</button></a>
               <button class="delete-button" name="button">Delete</button>
             </div>
             </div>
-            </div>`;
+            </li>`;
   }
 
   function getRatingStars(rating) {
@@ -27,10 +28,10 @@ const bookmarkapp = (function () {
   }
   function generateHiddenForm(data) {
     return `
-           <form role= "role" class="hiddenformForm" method="post">
+           <form role= "role" class="hiddenformForm ${data.hidden}" method="post">
              <fieldset>
                <legend>
-                 <h2>${data ? data : 'Create Bookmark'}</h2>
+                 <h2>${data && data.title ? data : 'Create Bookmark'}</h2>
                </legend>
                <label for="title-entry">Title</label>
                <input placeholder='Enter Title' required class='title-entry' type="text" name='title-entry' />
@@ -53,8 +54,7 @@ const bookmarkapp = (function () {
   function addBookmarkButtonHandler() {
     $('.add-button-holder').on('click', function (event) {
       event.preventDefault();
-      $('#hiddenform').html(generateHiddenForm());
-      $('#hiddenform').css('display', 'block');
+      $('#hiddenform').html(generateHiddenForm({hidden: 'active'}));
       submitBookmarkToList();
     });
   }
@@ -69,7 +69,7 @@ const bookmarkapp = (function () {
   }
 
   function hideBoomarkForm() {
-    $('#hiddenform').css('display', 'none');
+    $('#hiddenform').html(generateHiddenForm({ hidden: 'hidden'}));
   }
 
   function generateBookmarks(items) {
@@ -93,7 +93,6 @@ const bookmarkapp = (function () {
         api.createItem(newItem, function (item) {
           store.addItemToStore(item);
           render();
-          viewBookmark();
         });
         hideBoomarkForm();
       }
@@ -106,7 +105,6 @@ const bookmarkapp = (function () {
       api.createItem(newItem, function (createdItem) {
         item.id = createdItem.id;
         render();
-        viewBookmark();
       });
     });
   }
@@ -152,7 +150,6 @@ const bookmarkapp = (function () {
       api.deleteItem(id, function () {
         store.findAndDelete(id);
         render();
-        viewBookmark();
       });
     });
   }
@@ -160,13 +157,16 @@ const bookmarkapp = (function () {
   function render(items) {
     const bookmarkHtml = generateBookmarks(items ? items : store.items);
     $('.bookmark-list').html(bookmarkHtml);
+    viewBookmark();
   }
 
 
   function viewBookmark() {
-    $('.h2-title').on('click', function () {
-      let _target = $(this).parent().find('.bookmark-hidden-area');
-      _target.toggleClass('active');
+    $('.h2-title').on('click', function(event) {
+      const id = getBookmarkId(event.currentTarget);
+      let _toggleExpand = store.findById(id);
+      _toggleExpand.active = !_toggleExpand.active;
+      render();
     });
   }
 

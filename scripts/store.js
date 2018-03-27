@@ -3,34 +3,38 @@
 // global $, store, api, bookmarkapp
 const store = (function() {
   let items = [
-    {
+    /*{
       title: 'New York Times',
       rating: '4',
       expanded: false,
-      desc: "Breaking News, World News & Multimedia",
-      url: "https://www.nytimes.com"
+      desc: 'Breaking News, World News & Multimedia',
+      url: 'https://www.nytimes.com',
+      active: false
     },
     {
       title: 'HuffingtonPost',
       rating: '4',
       expanded: false,
-      desc: "Breaking News, U.S. and World News | HuffPost",
-      url: "https://www.huffingtonpost.com/"
+      desc: 'Breaking News, U.S. and World News | HuffPost',
+      url: 'https://www.huffingtonpost.com/',
+      active: false
     },
     {
       title: 'CNN',
       rating: '3',
       expanded: false,
-      desc: "Breaking News, Latest News and Videos",
-      url: "https://www.cnn.com"
+      desc: 'Breaking News, Latest News and Videos',
+      url: 'https://www.cnn.com',
+      active: false
     },
     {
       title: 'Washington Post',
       rating: '5',
       expanded: false,
-      desc: "Democracy dies in darkness",
-      url: "https://www.washingtonpost.com/"
-    },
+      desc: 'Democracy dies in darkness',
+      url: 'https://www.washingtonpost.com/',
+      active: false
+    }*/
   ];
   let adding = false;
 
@@ -42,10 +46,6 @@ const store = (function() {
     const item = this.findById(id);
     item.adding = !item.adding;
   };
-
-  //   const toggleAddItem= function() {
-  //     this.adding = !this.adding;
-  //   };
 
   const addItemToStore= function(item) {
     this.items.push(item);
@@ -66,9 +66,6 @@ const store = (function() {
     return items;
   };
 
-  //   function findAndUpdate(id, newData) {
-  //     Object.assign(findById(id), newData);
-  //   }
   function findAndDelete(id) {
     this.items = this.items.filter(item => item.id !== id);
   }
@@ -78,12 +75,10 @@ const store = (function() {
     items,
     adding,
     ratingFilter: null,
-    // toggleAddItem,
     addItemToStore,
     toggleHiddenButton,
     findByRating,
     findAndDelete,
-    // findAndUpdate
     findById,
     findAndToggleChecked
   };
