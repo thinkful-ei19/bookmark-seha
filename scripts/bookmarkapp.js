@@ -8,7 +8,7 @@ const bookmarkapp = (function () {
     $('.add-button-holder').on('click', function (event) {
       event.preventDefault();
       store.showModal = !store.showModal;
-      // $('#hiddenform').html(newBookmarkForm({hidden: 'active'}));
+      $('#hiddenform').html(newBookmarkForm({hidden: 'active'}));
       // submitBookmarkToList();
       render();
     });
@@ -123,8 +123,9 @@ const bookmarkapp = (function () {
   }
   function newBookmarkForm(data) {
     return `
-      <h2>Create Bookmark</h2>
+      
       <form role= "role" class="hiddenformForm" method="post">
+     <h2>${data && data.title ? data : 'Create Bookmark'}</h2>
              <label for="title-entry">Title</label>
              <input placeholder='Enter Title' required class='title-entry' type="text" name='title-entry' />
              <label for="url-entry">URL</label>
