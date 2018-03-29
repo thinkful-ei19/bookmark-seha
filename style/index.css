@@ -74,12 +74,12 @@ h1{
     background:  rgb(132, 215, 253);
     margin: 0 auto;
   }
-.hiddenformForm.hidden {
+/* .hiddenformForm.hidden {
   display: none;
 }
 .hiddenformForm.active {
   display: block;
-}  
+}   */
 p{
     display: block;
     -webkit-margin-before: 1em;
@@ -132,4 +132,8 @@ button[type="submit"] {
 
 .bookmark-hidden-area {
   display: none;
+}
+
+.centered {
+  text-align: center;
 }

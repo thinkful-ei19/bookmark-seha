@@ -3,7 +3,7 @@
 // global $, store, api, bookmarkapp
 const store = (function() {
   let items = [
-    /*{
+    {
       title: 'New York Times',
       rating: '4',
       expanded: false,
@@ -34,7 +34,7 @@ const store = (function() {
       desc: 'Democracy dies in darkness',
       url: 'https://www.washingtonpost.com/',
       active: false
-    }*/
+    }
   ];
   let adding = false;
 
@@ -70,16 +70,19 @@ const store = (function() {
     this.items = this.items.filter(item => item.id !== id);
   }
 
+  let showModal = false;
+
 
   return {
-    items,
     adding,
-    ratingFilter: null,
     addItemToStore,
-    toggleHiddenButton,
     findByRating,
     findAndDelete,
     findById,
-    findAndToggleChecked
+    findAndToggleChecked,
+    items,
+    ratingFilter: null,
+    showModal,
+    toggleHiddenButton
   };
 }());

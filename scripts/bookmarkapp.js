@@ -6,14 +6,15 @@ const bookmarkapp = (function () {
   function generateBookmark(item) {
     let _class = item.active ? 'active' : '';
     return `<li role="button" class="bookmark-item-expanded" data-item-id="${item.id}">
-            <h2 class="h2-title"> ${item.title} </h2>
-            <div class="rating-expanded">${getRatingStars(item.rating)}</div>
-            <div class="bookmark-hidden-area ${_class}">
-              <p>${item.desc === '' ? 'No Description' : item.desc}</p>
-              <a href="${item.url}" target="_blank"><button class="link-button" name="link-button">Visit Site</button></a>
-              <button class="delete-button" name="button">Delete</button>
-            </div>
-            </div>
+              <h2 class="h2-title">${item.title}</h2>
+              <div class="rating-expanded">${getRatingStars(item.rating)}</div>
+              <div class="bookmark-hidden-area${_class}">
+                <p>${item.desc === '' ? 'No Description' : item.desc}</p>
+                <a href="${item.url}" target="_blank">
+                  <button class="link-button" name="link-button">Visit Site</button>
+                </a>
+                <button class="delete-button" name="button">Delete</button>
+              </div>
             </li>`;
   }
 
@@ -26,24 +27,22 @@ const bookmarkapp = (function () {
     <span class="fa fa-star ${rating >= 5 ? 'checked' : ''}"></span>
     `;
   }
-  function generateHiddenForm(data) {
+  function newBookmarkForm(data) {
     return `
-           <form role= "role" class="hiddenformForm ${data.hidden}" method="post">
-             <fieldset>
-               <legend>
-                 <h2>${data && data.title ? data : 'Create Bookmark'}</h2>
-               </legend>
-               <label for="title-entry">Title</label>
-               <input placeholder='Enter Title' required class='title-entry' type="text" name='title-entry' />
-               <label for="url-entry">URL</label>
-               <input placeholder='Enter Url' required class='url-entry' type="href" name='url' />
-               <label for="rating-entry">Ratings</label>
-               <input type="text" name="rating-entry" class="rating-entry" placeholder="Enter Rating" />
-               <label for="description-entry">Description</label>
-               <input placeholder='Detailed Description' class='description-entry' type="text" maxlength="150" name='Description' />
-               <button class="submit-bookmark" type="submit">Submit</button>
-             </fieldset>
-           </form>`;
+      <h2>Create Bookmark</h2>
+      <form role= "role" class="hiddenformForm" method="post">
+         <fieldset>
+             <label for="title-entry">Title</label>
+             <input placeholder='Enter Title' required class='title-entry' type="text" name='title-entry' />
+             <label for="url-entry">URL</label>
+             <input placeholder='Enter Url' required class='url-entry' type="href" name='url' />
+             <label for="rating-entry">Ratings</label>
+             <input type="text" name="rating-entry" class="rating-entry" placeholder="Enter Rating" />
+             <label for="description-entry">Description</label>
+             <input placeholder='Detailed Description' class='description-entry' type="text" maxlength="150" name='Description' />
+             <button class="submit-bookmark" type="submit">Submit</button>
+         </fieldset>
+      </form>`;
   }
 
   function generateAddButton() {
@@ -54,8 +53,10 @@ const bookmarkapp = (function () {
   function addBookmarkButtonHandler() {
     $('.add-button-holder').on('click', function (event) {
       event.preventDefault();
-      $('#hiddenform').html(generateHiddenForm({hidden: 'active'}));
-      submitBookmarkToList();
+      store.showModal = !store.showModal;
+      // $('#hiddenform').html(newBookmarkForm({hidden: 'active'}));
+      // submitBookmarkToList();
+      render();
     });
   }
 
@@ -69,12 +70,29 @@ const bookmarkapp = (function () {
   }
 
   function hideBoomarkForm() {
-    $('#hiddenform').html(generateHiddenForm({ hidden: 'hidden'}));
+    $('#hiddenform').html(newBookmarkForm({ hidden: 'hidden'}));
+  }
+
+  function ratingsFilter() {
+    return `
+      <form id="add-bookmark-form">
+          <label for="rating">Rating Filter</label>
+          <select id="rating" name="rating">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+          </select>
+      </form>
+    `
   }
 
   function generateBookmarks(items) {
-    const generateBookmarks = items.map(item => generateBookmark(item));
-    return generateBookmarks.join('');
+    const generateBookmarks = items.map(item => generateBookmark(item)).join('');
+    return `
+      <ul class="bookmark-list">${generateBookmarks}</ul>
+    `
   }
 
 
@@ -101,7 +119,7 @@ const bookmarkapp = (function () {
 
   function generateInitialList() {
     store.items.forEach(function (item) {
-      var newItem = { title: item.title, url: item.url, desc: item.desc, rating: item.rating };  
+      var newItem = { title: item.title, url: item.url, desc: item.desc, rating: item.rating };
       api.createItem(newItem, function (createdItem) {
         item.id = createdItem.id;
         render();
@@ -135,8 +153,6 @@ const bookmarkapp = (function () {
     });
   }
 
-
-
   function getBookmarkId(item) {
     return $(item)
       .closest('.bookmark-item-expanded')
@@ -155,11 +171,17 @@ const bookmarkapp = (function () {
   }
 
   function render(items) {
-    const bookmarkHtml = generateBookmarks(items ? items : store.items);
-    $('.bookmark-list').html(bookmarkHtml);
+    let _bookmarks = generateBookmarks(items ? items : store.items);
+    let _newBookmarkForm = newBookmarkForm();
+    let _ratings = ratingsFilter();
+    if(store.showModal) {
+      $('#app').html(`${_newBookmarkForm}${_ratings}${_bookmarks}`);
+    } else {
+      $('#app').html(`${_ratings}${_bookmarks}`);
+    }
     viewBookmark();
+    ratingsFilter();
   }
-
 
   function viewBookmark() {
     $('.h2-title').on('click', function(event) {
@@ -171,13 +193,12 @@ const bookmarkapp = (function () {
   }
 
   return {
-    render,
     addBookmarkButtonHandler,
     generateBookmark,
     generateAddButton,
-    generateHiddenForm,
-    submitBookmarkToList,
+    newBookmarkForm,
     getBookmarkId,
+    submitBookmarkToList,
     addFilterButtonHandler,
     expandBookmarkWindow,
     deleteBookmarkHandler,
