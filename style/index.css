@@ -47,12 +47,12 @@ body {
     margin-right: auto;
     margin-top: 25px
 }
-.hiddenformForm legend {
-    width: 70%;
+.hiddenformForm{
+    width: 100%;
     height: auto;
     line-height: 20px;
-    font-size: 20px;
-    font-weight: 300;
+    font-size: 14px;
+    font-weight:100;
     color: black;
     text-align: center;
     margin: 0 auto 40px;
@@ -74,12 +74,12 @@ h1{
     background:  rgb(132, 215, 253);
     margin: 0 auto;
   }
-.hiddenformForm.hidden {
+/* .hiddenformForm.hidden {
   display: none;
 }
 .hiddenformForm.active {
   display: block;
-}  
+}   */
 p{
     display: block;
     -webkit-margin-before: 1em;
@@ -132,4 +132,8 @@ button[type="submit"] {
 
 .bookmark-hidden-area {
   display: none;
+}
+
+.centered {
+  text-align: center;
 }

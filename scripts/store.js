@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 'use strict';
 // global $, store, api, bookmarkapp
-const store = (function() {
+const store = (function () {
   let items = [
-    /*{
+    {
       title: 'New York Times',
       rating: '4',
       expanded: false,
@@ -34,32 +34,32 @@ const store = (function() {
       desc: 'Democracy dies in darkness',
       url: 'https://www.washingtonpost.com/',
       active: false
-    }*/
+    }
   ];
   let adding = false;
 
-  const findById = function(id) {
+  const findById = function (id) {
     return this.items.find(item => item.id === id);
   };
 
-  const findAndToggleChecked = function(id) {
+  const findAndToggleChecked = function (id) {
     const item = this.findById(id);
     item.adding = !item.adding;
   };
 
-  const addItemToStore= function(item) {
+  const addItemToStore = function (item) {
     this.items.push(item);
   };
 
-  const toggleHiddenButton= function() {
+  const toggleHiddenButton = function () {
     const item = this.items.find(item => item.id === id);
     item.expanded = !item.expanded;
   };
 
-  const findByRating = function(rating) {
+  const findByRating = function (rating) {
     var items = [];
-    for(let i=0; i<this.items.length; i++) {
-      if(this.items[i].rating >= rating) {
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].rating >= rating) {
         items.push(this.items[i]);
       }
     }
@@ -70,16 +70,19 @@ const store = (function() {
     this.items = this.items.filter(item => item.id !== id);
   }
 
+  let showModal = false;
+
 
   return {
-    items,
     adding,
-    ratingFilter: null,
     addItemToStore,
-    toggleHiddenButton,
     findByRating,
     findAndDelete,
     findById,
-    findAndToggleChecked
+    findAndToggleChecked,
+    items,
+    ratingFilter: null,
+    showModal,
+    toggleHiddenButton
   };
 }());
