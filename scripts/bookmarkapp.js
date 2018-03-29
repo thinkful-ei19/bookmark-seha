@@ -3,6 +3,71 @@
 // global $, store, api, bookmarkapp
 
 const bookmarkapp = (function () {
+
+  function addBookmarkButtonHandler() {
+    $('.add-button-holder').on('click', function (event) {
+      event.preventDefault();
+      store.showModal = !store.showModal;
+      // $('#hiddenform').html(newBookmarkForm({hidden: 'active'}));
+      // submitBookmarkToList();
+      render();
+    });
+  }
+
+  function addFilterButtonHandler() {
+    $('#rating').on('change', function (event) {
+      var items = store.findByRating(event.currentTarget.value);
+      if (items) {
+        render(items);
+      }
+    });
+  }
+
+  function checkValidity(newItem) {
+    if (newItem.title == '' || newItem.url == '' || newItem.desc == '' || newItem.rating == '') {
+      alert('Please provide the missing information!');
+      return false;
+    }
+    if (!newItem.url.startsWith('http')) {
+      alert('Please enter valid URL that begins with http!');
+      return false;
+    }
+    if (isNaN(newItem.rating) || newItem.rating < 1 || newItem.rating > 5) {
+      alert('Please enter number between 1 and 5!');
+      return false;
+    }
+    return true;
+  }
+
+
+  function deleteBookmarkHandler() {
+    $('#app').on('click', '.delete-button', event => {
+      event.stopPropagation();
+      const id = getBookmarkId(event.currentTarget);
+      api.deleteItem(id, function () {
+        store.findAndDelete(id);
+        render();
+      });
+    });
+  }
+
+  function expandBookmarkWindow() {
+    $('.hiddenformForm').on('click', '.bookmark-container', event => {
+      const id = $(event.currentTarget).data('bookmark-id');
+      console.log(id);
+      const bookmark = store.items.find(item => item.id === id);
+      item.expanded = !item.expanded;
+      render();
+    });
+  }
+
+
+  function generateAddButton() {
+    const button = '<button class="add-button" type="submit">Add Bookmark</button>';
+    return button;
+  }
+
+  
   function generateBookmark(item) {
     let _class = item.active ? 'active' : '';
     return `<li role="button" class="bookmark-item-expanded" data-item-id="${item.id}">
@@ -16,6 +81,35 @@ const bookmarkapp = (function () {
                 <button class="delete-button" name="button">Delete</button>
               </div>
             </li>`;
+  }
+
+  function generateBookmarks(items) {
+    const generateBookmarks = items.map(item => generateBookmark(item)).join('');
+    return `
+      <ul class="bookmark-list">${generateBookmarks}</ul>
+    `;
+  }
+
+
+  function generateInitialList() {
+    store.items.forEach(function (item) {
+      var newItem = { title: item.title, url: item.url, desc: item.desc, rating: item.rating };
+      api.createItem(newItem, function (createdItem) {
+        item.id = createdItem.id;
+        render();
+      });
+    });
+  }
+
+  function getBookmarkId(item) {
+    return $(item)
+      .closest('.bookmark-item-expanded')
+      .attr('data-item-id');
+  }
+
+
+  function hideBoomarkForm() {
+    $('#hiddenform').html(newBookmarkForm({ hidden: 'hidden' }));
   }
 
   function getRatingStars(rating) {
@@ -41,35 +135,7 @@ const bookmarkapp = (function () {
              <input placeholder='Detailed Description' class='description-entry' type="text" maxlength="150" name='Description' />
              <button class="submit-bookmark" type="submit">Submit</button>
       </form>`;
-  }
-
-  function generateAddButton() {
-    const button = '<button class="add-button" type="submit">Add Bookmark</button>';
-    return button;
-  }
-
-  function addBookmarkButtonHandler() {
-    $('.add-button-holder').on('click', function (event) {
-      event.preventDefault();
-      store.showModal = !store.showModal;
-      // $('#hiddenform').html(newBookmarkForm({hidden: 'active'}));
-      // submitBookmarkToList();
-      render();
-    });
-  }
-
-  function addFilterButtonHandler() {
-    $('#rating').on('change', function (event) {
-      var items = store.findByRating(event.currentTarget.value);
-      if (items) {
-        render(items);
-      }
-    });
-  }
-
-  function hideBoomarkForm() {
-    $('#hiddenform').html(newBookmarkForm({ hidden: 'hidden' }));
-  }
+  }  
 
   function ratingsFilter() {
     return `
@@ -86,11 +152,18 @@ const bookmarkapp = (function () {
     `;
   }
 
-  function generateBookmarks(items) {
-    const generateBookmarks = items.map(item => generateBookmark(item)).join('');
-    return `
-      <ul class="bookmark-list">${generateBookmarks}</ul>
-    `;
+
+  function render(items) {
+    let _bookmarks = generateBookmarks(items ? items : store.items);
+    let _newBookmarkForm = newBookmarkForm();
+    let _ratings = ratingsFilter();
+    if (store.showModal) {
+      $('#app').html(`${_newBookmarkForm}${_ratings}${_bookmarks}`);
+    } else {
+      $('#app').html(`${_ratings}${_bookmarks}`);
+    }
+    viewBookmark();
+    ratingsFilter();
   }
 
 
@@ -115,72 +188,6 @@ const bookmarkapp = (function () {
     });
   }
 
-  function generateInitialList() {
-    store.items.forEach(function (item) {
-      var newItem = { title: item.title, url: item.url, desc: item.desc, rating: item.rating };
-      api.createItem(newItem, function (createdItem) {
-        item.id = createdItem.id;
-        render();
-      });
-    });
-  }
-
-  function checkValidity(newItem) {
-    if (newItem.title == '' || newItem.url == '' || newItem.desc == '' || newItem.rating == '') {
-      alert('Please provide the missing information!');
-      return false;
-    }
-    if (!newItem.url.startsWith('http')) {
-      alert('Please enter valid URL that begins with http!');
-      return false;
-    }
-    if (isNaN(newItem.rating) || newItem.rating < 1 || newItem.rating > 5) {
-      alert('Please enter number between 1 and 5!');
-      return false;
-    }
-    return true;
-  }
-
-  function expandBookmarkWindow() {
-    $('.hiddenformForm').on('click', '.bookmark-container', event => {
-      const id = $(event.currentTarget).data('bookmark-id');
-      console.log(id);
-      const bookmark = store.items.find(item => item.id === id);
-      item.expanded = !item.expanded;
-      render();
-    });
-  }
-
-  function getBookmarkId(item) {
-    return $(item)
-      .closest('.bookmark-item-expanded')
-      .attr('data-item-id');
-  }
-
-  function deleteBookmarkHandler() {
-    $('#app').on('click', '.delete-button', event => {
-      event.stopPropagation();
-      const id = getBookmarkId(event.currentTarget);
-      api.deleteItem(id, function () {
-        store.findAndDelete(id);
-        render();
-      });
-    });
-  }
-
-  function render(items) {
-    let _bookmarks = generateBookmarks(items ? items : store.items);
-    let _newBookmarkForm = newBookmarkForm();
-    let _ratings = ratingsFilter();
-    if (store.showModal) {
-      $('#app').html(`${_newBookmarkForm}${_ratings}${_bookmarks}`);
-    } else {
-      $('#app').html(`${_ratings}${_bookmarks}`);
-    }
-    viewBookmark();
-    ratingsFilter();
-  }
-
   function viewBookmark() {
     $('.h2-title').on('click', function (event) {
       const id = getBookmarkId(event.currentTarget);
@@ -192,15 +199,15 @@ const bookmarkapp = (function () {
 
   return {
     addBookmarkButtonHandler,
-    generateBookmark,
-    generateAddButton,
-    newBookmarkForm,
-    getBookmarkId,
-    submitBookmarkToList,
     addFilterButtonHandler,
-    expandBookmarkWindow,
     deleteBookmarkHandler,
-    viewBookmark,
-    generateInitialList
+    expandBookmarkWindow,
+    generateAddButton,
+    generateBookmark,
+    generateInitialList,
+    getBookmarkId,
+    newBookmarkForm,
+    submitBookmarkToList,
+    viewBookmark
   };
 })();
