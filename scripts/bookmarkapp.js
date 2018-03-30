@@ -8,8 +8,7 @@ const bookmarkapp = (function () {
     $('.add-button-holder').on('click', function (event) {
       event.preventDefault();
       store.showModal = !store.showModal;
-      $('#hiddenform').html(newBookmarkForm({hidden: 'active'}));
-      // submitBookmarkToList();
+
       render();
     });
   }
@@ -90,7 +89,6 @@ const bookmarkapp = (function () {
     `;
   }
 
-
   function generateInitialList() {
     store.items.forEach(function (item) {
       var newItem = { title: item.title, url: item.url, desc: item.desc, rating: item.rating };
@@ -121,6 +119,7 @@ const bookmarkapp = (function () {
     <span class="fa fa-star ${rating >= 5 ? 'checked' : ''}"></span>
     `;
   }
+
   function newBookmarkForm(data) {
     return `
       
@@ -156,15 +155,17 @@ const bookmarkapp = (function () {
 
   function render(items) {
     let _bookmarks = generateBookmarks(items ? items : store.items);
-    let _newBookmarkForm = newBookmarkForm();
     let _ratings = ratingsFilter();
     if (store.showModal) {
+      let _newBookmarkForm = newBookmarkForm();
       $('#app').html(`${_newBookmarkForm}${_ratings}${_bookmarks}`);
+      submitBookmarkToList();
     } else {
       $('#app').html(`${_ratings}${_bookmarks}`);
     }
     viewBookmark();
-    ratingsFilter();
+    addFilterButtonHandler();
+    deleteBookmarkHandler();
   }
 
 
@@ -177,7 +178,6 @@ const bookmarkapp = (function () {
       const rating = $('.rating-entry').val();
 
       $('.add-button-holder').html(generateAddButton());
-      addBookmarkButtonHandler();
       var newItem = { title: title, url: url, desc: desc, rating: rating };
       if (checkValidity(newItem)) {
         api.createItem(newItem, function (item) {
@@ -200,15 +200,6 @@ const bookmarkapp = (function () {
 
   return {
     addBookmarkButtonHandler,
-    addFilterButtonHandler,
-    deleteBookmarkHandler,
-    expandBookmarkWindow,
-    generateAddButton,
-    generateBookmark,
-    generateInitialList,
-    getBookmarkId,
-    newBookmarkForm,
-    submitBookmarkToList,
-    viewBookmark
+    generateInitialList
   };
 })();

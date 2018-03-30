@@ -133,3 +133,6 @@ button[type="submit"] {
 .centered {
   text-align: center;
 }
+a{
+  text-decoration: none;
+}
