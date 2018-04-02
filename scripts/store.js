@@ -3,38 +3,38 @@
 // global $, store, api, bookmarkapp
 const store = (function () {
   let items = [
-    {
-      title: 'New York Times',
-      rating: '4',
-      expanded: false,
-      desc: 'Breaking News, World News & Multimedia',
-      url: 'https://www.nytimes.com',
-      active: false
-    },
-    {
-      title: 'HuffingtonPost',
-      rating: '4',
-      expanded: false,
-      desc: 'Breaking News, U.S. and World News | HuffPost',
-      url: 'https://www.huffingtonpost.com/',
-      active: false
-    },
-    {
-      title: 'CNN',
-      rating: '3',
-      expanded: false,
-      desc: 'Breaking News, Latest News and Videos',
-      url: 'https://www.cnn.com',
-      active: false
-    },
-    {
-      title: 'Washington Post',
-      rating: '5',
-      expanded: false,
-      desc: 'Democracy dies in darkness',
-      url: 'https://www.washingtonpost.com/',
-      active: false
-    }
+    // {
+    //   title: 'New York Times',
+    //   rating: '4',
+    //   expanded: false,
+    //   desc: 'Breaking News, World News & Multimedia',
+    //   url: 'https://www.nytimes.com',
+    //   active: false
+    // },
+    // {
+    //   title: 'HuffingtonPost',
+    //   rating: '4',
+    //   expanded: false,
+    //   desc: 'Breaking News, U.S. and World News | HuffPost',
+    //   url: 'https://www.huffingtonpost.com/',
+    //   active: false
+    // },
+    // {
+    //   title: 'CNN',
+    //   rating: '3',
+    //   expanded: false,
+    //   desc: 'Breaking News, Latest News and Videos',
+    //   url: 'https://www.cnn.com',
+    //   active: false
+    // },
+    // {
+    //   title: 'Washington Post',
+    //   rating: '5',
+    //   expanded: false,
+    //   desc: 'Democracy dies in darkness',
+    //   url: 'https://www.washingtonpost.com/',
+    //   active: false
+    // }
   ];
   let adding = false;
 
